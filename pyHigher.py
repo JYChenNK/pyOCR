@@ -217,16 +217,16 @@ def OCRloop():
             if ui.HR.get() == 1:
                 Image_HR = get_screenshot(4)
 
-            VO2_string,  V02_value = recognize(Image_VO2)
+            VO2_string,  V02_value  = recognize(Image_VO2)
             VCO2_string, VCO2_value = recognize(Image_VCO2)
-            VE_string,   VE_value = recognize(Image_VE)
-            HR_string,   HR_value = recognize(Image_HR)
+            VE_string,   VE_value   = recognize(Image_VE)
+            HR_string,   HR_value   = recognize(Image_HR)
 
             res_string = VO2_string + ',' + VCO2_string + ',' + VE_string + ',' + HR_string + '\n'
             ui.Text.insert(tk.END, res_string)
             ui.Text.see(tk.END)
-            Data = [int(V02_value), int(VCO2_value), int(VE_value*10), int(HR_value)]
-            buffer = struct.pack("hhhh", *Data)
+            Data = [int(V02_value), int(VCO2_value), int(VE_value*10), int(HR_value),int((V02_value+VCO2_value+VE_value*10+HR_value)%256)]
+            buffer = struct.pack("hhhBB", *Data)
             ser.write(buffer)
         time.sleep(0.2)
 
@@ -234,12 +234,7 @@ def OCRloop():
 
 def setState():
     ui.State = 1
-    # print(ui.VO2.get())
-    # ui.Text.insert(tk.END, 'Hello\n')
-    # if ui.VO2 == 1:
-    #     ui.Text.insert(tk.END, 'Hello\n')
-    #     ui.Text.see(tk.END)
-    # ui.TextLine = ui.TextLine + 1
+
 
 def resetState():
     ui.State = 0
